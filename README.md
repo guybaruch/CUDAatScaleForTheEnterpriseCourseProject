@@ -1,9 +1,11 @@
 # CUDAatScaleForTheEnterpriseCourseProjectTemplate
-This is a template for the course project for the CUDA at Scale for the Enterprise
+This the final course project for the "CUDA at Scale for the Enterprise"
+coursera course by Guy Baruch.
 
 ## Project Description
 
-Beyond just being a template for course members, this project can be used by non-course members as the general structure for CUDA projects.
+The purpose of this application is to present an input image at consecutive subresolutions on a single image.
+It inputs a number k=1,..,7 and a greyscale or an RGB N by M image and outputs an (3/2)N by M image (in PNG format), with copies of the original image downscaled by factors of X2, X4, X8 .. X2^k within the same image.
 
 ## Code Organization
 

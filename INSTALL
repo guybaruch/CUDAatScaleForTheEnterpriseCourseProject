@@ -1,0 +1,7 @@
+
+On linux:
+install nvidia-cuda-toolkit
+install libfreeimage-dev
+
+make
+
