@@ -2,11 +2,12 @@
 IDIR=./
 COMPILER=nvcc
 
-LIBRARIES += -lcudart -lcuda -lnppisu_static -lnppif_static -lnppc_static -lculibos -lfreeimage
+#LIBRARIES += -lcudart -lcuda -lnppisu_static -lnppif_static -lnppc_static -lculibos -lfreeimage
+LIBRARIES += -lcuda -lcudart -lnppisu -lnppif -lnppc -lculibos -lfreeimage
 
 COMPILER_FLAGS=-I/usr/local/cuda/include -I/usr/local/cuda/lib64 \
-	-I./Common -I./Common/UtilNPP ${LIBRARIES} --std c++17
-
+	-I./Common -I./Common/UtilNPP ${LIBRARIES} --std c++17 \
+	-g
 
 build: bin/display_multires
 
