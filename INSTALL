@@ -1,7 +1,8 @@
 
 On linux:
-install nvidia-cuda-toolkit
-install libfreeimage-dev
+1) install nvidia-cuda-toolkit
+2) install libfreeimage-dev
+3) download cuda-samples consistent with you cuda version and copy the Common directory to the project root.
 
 make
 
