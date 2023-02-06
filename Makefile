@@ -9,9 +9,9 @@ COMPILER_FLAGS=-I/usr/local/cuda/include -I/usr/local/cuda/lib64 \
 	-I./Common -I./Common/UtilNPP ${LIBRARIES} --std c++17 \
 	-g
 
-build: bin/display_multires
+build: bin/display_multires.exe
 
-bin/display_multires: src/display_multires.cu
+bin/display_multires.exe: src/display_multires.cu
 	$(COMPILER) $(COMPILER_FLAGS) $< -o $@
 
 clean:

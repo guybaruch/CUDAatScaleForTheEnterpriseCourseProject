@@ -76,23 +76,17 @@ struct Args {
 
 Args parse_args(int argc, char** argv) {
     Args args;
-    if (1) {
-        args.k = 2;
-        args.input_name = "data/sloth-gray.png";
-        args.output_name = "data/sloth-gray-mr.png";
-        return args;
-    }
 
     if (argc!=4) {
         std::cerr << "Format:\n display_multires "
-            "<NUM_RES> <INPUT_FILE> <OUTPUT_FILE>\n";
+            "<NUM_RES>=1..9 <INPUT_FILE> <OUTPUT_FILE>\n";
         exit(-1);
     }
     //for (int ci=0; ci<argc; ci++) 
     //    std::cout << "arg " << ci << " " << std::string(argv[ci]) << std::endl;
     {
         args.k = atoi(argv[1]);
-        assert(args.k>0 && args.k<7);
+        assert(args.k>0 && args.k<10);
     }
     args.input_name = argv[2];
     args.output_name = argv[3];
@@ -105,8 +99,8 @@ Args parse_args(int argc, char** argv) {
 // copy src image to first 2/3rds of image, fill the rest with zeros.
 __global__ void init_trg_kernel(const Npp8u* src, Npp8u* trg,
         Rectangle srcRect, Rectangle trgRect) {
-    const int tidx_x = gridDim.x * blockIdx.x + threadIdx.x;
-    const int tidx_y = gridDim.y * blockIdx.y + threadIdx.y;
+    const int tidx_x = blockDim.x * blockIdx.x + threadIdx.x;
+    const int tidx_y = blockDim.y * blockIdx.y + threadIdx.y;
 
     const int src_addr = tidx_y * srcRect.stride + tidx_x;
     const int trg_addr = tidx_y * trgRect.stride + tidx_x;
@@ -131,14 +125,14 @@ __global__ void init_trg_kernel(const Npp8u* src, Npp8u* trg,
 // the result to a target subrectangle
 __global__ void downscale_subimage_kernel(Npp8u* img,
         Rectangle fullRect, Rectangle srcRect, Rectangle trgRect) {
-    const int tidx_x = gridDim.x * blockIdx.x + threadIdx.x;
-    const int tidx_y = gridDim.y * blockIdx.y + threadIdx.y;
+    const int tidx_x = blockDim.x * blockIdx.x + threadIdx.x;
+    const int tidx_y = blockDim.y * blockIdx.y + threadIdx.y;
 
     __shared__ Npp8u buff[2][X_STRIDE];
 
     const int src_x = srcRect.x0 + tidx_x;
     const int src_y = srcRect.y0 + tidx_y;
-    const int src_addr = src_y * srcRect.stride + src_x;
+    const int src_addr = src_y * fullRect.stride + src_x;
 
     if (tidx_x < srcRect.width && src_x < fullRect.width
             && tidx_y < srcRect.height && src_y < fullRect.height
@@ -162,7 +156,7 @@ __global__ void downscale_subimage_kernel(Npp8u* img,
 
     const int trg_x = trgRect.x0 + tidx_x/2;
     const int trg_y = trgRect.y0 + tidx_y/2;
-    const int trg_addr = trg_y * trgRect.stride + trg_x;
+    const int trg_addr = trg_y * fullRect.stride + trg_x;
 
     if (threadIdx.x%2==0 && threadIdx.y==0
             && tidx_x/2 < trgRect.width && trg_x < fullRect.width
@@ -293,6 +287,7 @@ int main (int argc, char **argv)
 
     Rectangle currRect = src_rect;
     for(int k=0; k<args.k; ++k) {
+        if (currRect.width < 4 || currRect.height<4) break;
         currRect = downscale_subimage(
                 d_trg_C1.data(), trg_rect, currRect, k);
     }
