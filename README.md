@@ -4,8 +4,8 @@ coursera course by Guy Baruch.
 
 ## Project Description
 
-The purpose of this application is to present an input image at consecutive subresolutions on a single image.
-It inputs a number k=1,..,7 and a greyscale N by M image and outputs an (3/2)N by M image (in PNG format), with copies of the original image downscaled by factors of X2, X4, X8 .. X2^k within the same image.
+The purpose of this application is to present an input image at consecutive subresolutions on a single output image.
+It inputs a number k=1,..,9 and a greyscale N by M image and outputs an (3/2)N by M image (in PNG format), with copies of the original image downscaled by factors of X2, X4, X8 .. X2^k within the same image.
 
 ## Code Organization
 

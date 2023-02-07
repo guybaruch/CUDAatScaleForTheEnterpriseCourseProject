@@ -3,9 +3,10 @@ On linux:
 1) install nvidia-cuda-toolkit
 2) install libfreeimage-dev
 3) download cuda-samples consistent with you cuda version and copy the Common directory to the project root.
-
-make
+4) make
 
 Then run:
-./bin/display_multires
-to get the format.
+./bin/display_multires.exe
+to get the format, or 
+display_multires <NUM_RES>=1..9 <INPUT_FILE> <OUTPUT_FILE>
+where INPUT_FILE is a greyscale 8bit char image.

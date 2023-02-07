@@ -18,5 +18,5 @@ clean:
 	rm -f bin/*
 
 run:
-	./bin/display_multires $(ARGS)
+	./bin/display_multires.exe $(ARGS)
 
